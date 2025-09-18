@@ -1,6 +1,4 @@
 // public/secretaria-turnos.js
-// UI mejorada: preview centrado, Fecha Inicio (date+hora 30'), Fecha Fin auto, Notas abajo.
-// Reglas: L-V, 09:00–18:00 (último inicio 17:30). DNI = 8 números. Fines de semana bloqueados.
 
 (async () => {
   // Bootstrap (usa tu helper de common.js)
@@ -23,7 +21,7 @@
   const toLocalDateTimeString = (d) =>
     `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
-  // --------- Elements ---------
+  // --------- Elementos ---------
   const form         = $('#formTurno');
   const selOdo       = $('#selOdo');
 
@@ -43,8 +41,134 @@
   const fechaDia     = $('#fechaDia');
   const horaInicio   = $('#horaInicio');
   const fechaFinDisp = $('#fechaFinDisplay');
-
   const btnCancelar  = $('#btnCancelar');
+
+  // === Restricción: fecha mínima = HOY (local, sin UTC off-by-one) ===
+  function hoyLocalYYYYMMDD() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+  const HOY_MIN = hoyLocalYYYYMMDD();
+
+  if (fechaDia) {
+    // Setear min al cargar
+    fechaDia.setAttribute('min', HOY_MIN);
+
+    // Corregir si hubiera un valor previo inválido
+    if (fechaDia.value && fechaDia.value < HOY_MIN) {
+      fechaDia.value = HOY_MIN;
+    }
+
+    // Forzar restricción ante cambios manuales
+    fechaDia.addEventListener('change', () => {
+      if (fechaDia.value && fechaDia.value < HOY_MIN) {
+        fechaDia.value = HOY_MIN;
+      }
+    });
+  }
+
+  // === Configuración de horario (turnos 30') ===
+  const OPEN_FROM  = "09:00";
+  const OPEN_TO    = "18:00";
+  const LAST_START = "17:30"; // último inicio permitido (30' de duración)
+  const STEP       = 1800;    // 30 minutos (en segundos)
+
+  // Helpers de tiempo
+  const toMin = (hhmm) => {
+    const [h, m] = (hhmm || "00:00").split(':').map(Number);
+    return h * 60 + (m || 0);
+  };
+  const minToStr = (mins) =>
+    `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+
+  const todayStrLocal = () => {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+
+  // Redondear hacia arriba al próximo múltiplo de 30'
+  const roundUp30 = (date) => {
+    const mins = date.getHours() * 60 + date.getMinutes();
+    return minToStr(Math.ceil(mins / 30) * 30);
+  };
+
+  // Aplicar restricciones al selector de hora según la fecha elegida
+  function aplicarRestriccionHora() {
+    if (!fechaDia || !horaInicio) return;
+
+    // Si no hay fecha, bloqueá la hora
+    if (!fechaDia.value) {
+      horaInicio.disabled = true;
+      horaInicio.value = "";
+      return;
+    }
+
+    horaInicio.step = STEP;
+
+    const esHoy = fechaDia.value === todayStrLocal();
+    let minTime = OPEN_FROM;
+
+    if (esHoy) {
+      let nextSlot = roundUp30(new Date());
+      if (toMin(nextSlot) < toMin(OPEN_FROM)) nextSlot = OPEN_FROM;
+      minTime = nextSlot;
+
+      // Si ya pasó el último inicio, no hay turnos hoy
+      if (toMin(minTime) > toMin(LAST_START)) {
+        horaInicio.disabled = true;
+        horaInicio.value = "";
+        horaInicio.title = "No hay turnos disponibles para hoy.";
+        return;
+      }
+    }
+
+     // Para cualquier fecha válida, habilitá la hora
+  horaInicio.disabled = false;
+  horaInicio.removeAttribute('title');
+
+  // Importante: el máximo debe ser el ÚLTIMO INICIO permitido (17:30)
+  horaInicio.min = minTime;
+  horaInicio.max = LAST_START;
+
+  // Forzar valor al mínimo vigente si está vacío o por debajo
+  if (!horaInicio.value || toMin(horaInicio.value) < toMin(minTime)) {
+    horaInicio.value = minTime;
+  } else if (toMin(horaInicio.value) > toMin(LAST_START)) {
+    horaInicio.value = LAST_START;
+  }
+  }
+  fechaDia?.addEventListener('input', aplicarRestriccionHora);
+  horaInicio?.addEventListener('focus', aplicarRestriccionHora);
+  horaInicio?.addEventListener('click', aplicarRestriccionHora);
+  // Ejecutar cuando cambia la fecha y al cargar
+  fechaDia?.addEventListener('change', aplicarRestriccionHora);
+  aplicarRestriccionHora();
+
+  // Clamp defensivo si el usuario escribe manualmente una hora
+  horaInicio?.addEventListener('input', () => {
+    if (!horaInicio.value) return;
+    const minAttr = horaInicio.getAttribute('min') || OPEN_FROM;
+    const maxAttr = horaInicio.getAttribute('max') || LAST_START;
+
+    // Normalizar a pasos de 30' si el navegador deja escribir libre
+    const [h, m] = horaInicio.value.split(':').map(Number);
+    const mins = h * 60 + m;
+    const snapped = minToStr(Math.round(mins / 30) * 30);
+    if (snapped !== horaInicio.value) horaInicio.value = snapped;
+
+    // Respetar min/max vigentes
+    if (toMin(horaInicio.value) < toMin(minAttr)) {
+      horaInicio.value = minAttr;
+    } else if (toMin(horaInicio.value) > toMin(maxAttr)) {
+      horaInicio.value = maxAttr;
+    }
+  });
 
   let pacienteLoaded = null;
 
@@ -70,7 +194,10 @@
 
   // --------- DNI: solo números, exactamente 8 ---------
   dniInput?.addEventListener('input', (e) => {
-    e.target.value = onlyDigits(e.target.value).slice(0, 8);
+    // Asegurar que solo se permitan dígitos y máximo 8
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
+
+    // Si tiene menos de 8 dígitos, ocultar preview y resetear paciente
     if (e.target.value.length < 8) {
       prevWrap.style.display = 'none';
       pacienteLoaded = null;
@@ -126,6 +253,7 @@
   fiWrap?.addEventListener('click', (e) => {
     // si clickea en el select, no abrir date picker
     if (e.target === horaInicio) return;
+    aplicarRestriccionHora();
     fechaDia.focus();
     if (typeof fechaDia.showPicker === 'function') {
       fechaDia.showPicker(); // Chrome/Edge modernos
@@ -137,7 +265,7 @@
     setStatus('');
     fechaFinDisp.value = '';
 
-    // Validar fecha
+    // Validar fecha/hora
     if (!fechaDia.value || !horaInicio.value) return;
 
     const [yyyy, mm, dd] = fechaDia.value.split('-').map(Number);
@@ -149,12 +277,12 @@
     if (!isWeekday(start)) {
       setStatus('Solo se permiten turnos de lunes a viernes.', 'error');
       fechaDia.value = '';
+      aplicarRestriccionHora(); // re-aplica bloqueos de hora
       return;
     }
 
-    // Último inicio 17:30 (select ya lo limita). Fin = +30'
+    // Fin = +30'
     const end = new Date(start.getTime() + 30 * 60 * 1000);
-
     fechaFinDisp.value = toLocalDateTimeString(end);
   }
 
@@ -168,6 +296,7 @@
     pacienteLoaded = null;
     fechaFinDisp.value = '';
     setStatus('Formulario limpiado.', 'ok');
+    aplicarRestriccionHora(); // re-evaluar bloqueos
     dniInput.focus();
   });
 
@@ -245,6 +374,7 @@
       prevWrap.style.display = 'none';
       pacienteLoaded = null;
       fechaFinDisp.value = '';
+      aplicarRestriccionHora(); // re-evaluar bloqueos post-reset
       dniInput.focus();
     } catch (err) {
       console.error(err);
