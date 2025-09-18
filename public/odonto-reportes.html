@@ -1,0 +1,46 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/>
+<title>Dentasoft · Reportes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="./styles.css"/>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script defer src="./common.js"></script>
+<script defer src="./odonto-reportes.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">🦷 <span>DENTASOFT</span></div>
+  <nav class="menu">
+    <a class="backlink upper" href="./odonto.html">ATRÁS</a>
+    <a class="backlink upper" href="./index.html">SALIR</a>
+  </nav>
+</header>
+
+<section class="container">
+  <div class="page-head"><h1 class="headline-xl">Reportes</h1></div>
+
+  <div class="card">
+    <div class="grid3">
+      <div>
+        <div class="label">Desde</div>
+        <input type="date" id="rDesde">
+      </div>
+      <div>
+        <div class="label">Hasta</div>
+        <input type="date" id="rHasta">
+      </div>
+      <div class="flex" style="align-items:end">
+        <button id="rCalcular" class="tile tile-blue">Calcular</button>
+      </div>
+    </div>
+
+    <div id="rKpi" style="margin-top:12px"></div>
+    <h3>Detalle por día</h3>
+    <div id="rDiario"></div>
+  </div>
+</section>
+
+<footer>© Dentasoft</footer>
+</body></html>
