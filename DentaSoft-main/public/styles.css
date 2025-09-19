@@ -1,0 +1,324 @@
+
+/* --- Background: clinical minimal photo + soft overlay --- */
+body{
+  background-image: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url('./assets/bg.webp');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+/* Keep content readable on photo */
+.card, .choices-card, .page-head, header.topbar{
+  backdrop-filter: blur(2px);
+}
+
+/* Title separator for in-app panels */
+.page-title{
+  text-align:center;
+  font-size: 28px;
+  font-weight: 900;
+  margin: 10px auto 14px auto;
+  padding: 10px 0 12px 0;
+  border-bottom: 3px solid var(--line);
+  width: min(960px, 92%);
+}
+
+/* Right-aligned checkbox line */
+.row.right{ justify-content:flex-end }
+.checkline{ align-items:center; gap:8px }
+.checkline input[type="checkbox"]{ transform: translateY(1px); }
+
+
+/* --- Dentasoft background tweak --- */
+body{
+  /* Soft gradient + subtle tooth SVG */
+  background-image: url('./assets/bg.webp');
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+/* Ensure main sections remain readable on the new background */
+.card, .choices-card, .page-head, header.topbar{
+  backdrop-filter: blur(2px);
+}
+
+:root{--blue:#0b5ed7;--blue-2:#0b3d91;--ink:#0b3d91;--bg:#ffffff;--line:#0b5ed7;--success:#16a34a;--danger:#ef4444;--muted:#6172a2;--radius:14px;--shadow:0 10px 24px rgba(11,61,145,.12)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial}
+a{color:var(--blue);text-decoration:none}.container{max-width:1120px;margin:24px auto;padding:0 16px}
+.topbar{background:#fff;border-bottom:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;position:sticky;top:0;z-index:10}
+.logo{font-weight:900;color:var(--blue-2);display:flex;align-items:center;gap:10px;font-size:20px}
+.menu{display:flex;gap:14px;flex-wrap:wrap}
+.menu a{font-weight:800;color:var(--blue-2);padding:8px 10px;border-radius:10px;border:2px solid transparent}
+.menu a:hover{background:#eef4ff}.menu a.active{border-color:transparent;background:transparent}
+.hero{display:grid;place-items:center;height:72vh;text-align:center;padding:20px}
+.hero .brand{font-size:56px;font-weight:900;color:var(--blue-2);display:flex;gap:10px;align-items:center;justify-content:center}
+.hero p{color:var(--muted);max-width:700px}
+.card{background:#fff;border:2px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:900px){.grid-2{grid-template-columns:1fr} .hero{height:auto;padding:36px 16px}}
+label{display:flex;flex-direction:column;gap:6px;font-weight:750;color:var(--blue-2)}
+input,select,button,textarea{border:2px solid var(--line);border-radius:10px;padding:.7rem .9rem;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(11,94,215,.18)}.btn{background:var(--blue);color:#fff;font-weight:800;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}.btn.ghost{background:#fff;color:var(--blue)}.btn.link{background:transparent;color:var(--blue);border-color:transparent;text-decoration:underline;box-shadow:none}
+.btn.danger{background:var(--danger);border-color:#ef4444}.btn.success{background:var(--success);border-color:#16a34a}
+.row{display:flex;gap:10px;align-items:center}.space{height:12px}.notice{padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--muted)}
+.center{text-align:center}.hidden{display:none}.badge{display:inline-block;border:2px solid var(--line);border-radius:999px;padding:.2rem .6rem;font-size:.82rem;color:var(--blue-2);font-weight:800;background:#fff}
+.tabs{display:flex;gap:10px;justify-content:center;margin-top:18px}
+.tab{border:2px solid var(--line);border-radius:999px;padding:.4rem 1rem;font-weight:900;color:var(--blue-2);background:#fff;cursor:pointer}
+.tab.active{background:#eef4ff}
+.form-box{max-width:520px;margin:16px auto}
+footer{padding:24px 0;color:var(--muted);text-align:center}
+
+
+/* --- Dashboard tiles & back --- */
+.tile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0}
+@media (max-width:900px){.tile-grid{grid-template-columns:1fr}}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:2px solid var(--line);border-radius:var(--radius);padding:28px;background:var(--blue);
+  color:#fff;font-weight:900;font-size:1.1rem;min-height:120px;cursor:pointer;text-align:center}
+.tile:hover{filter:brightness(1.05)}
+.section{display:none;margin-top:18px}
+.section.active{display:block}
+.section .card{background:#fff;border:2px solid var(--line);border-radius:var(--radius);padding:16px}
+.badge-role{display:inline-block;background:#eef4ff;color:var(--blue-2);border:2px solid var(--line);
+  border-radius:999px;padding:.25rem .6rem;font-weight:800}
+.backlink{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--blue-2);
+  text-decoration:none;border:2px solid var(--line);border-radius:999px;padding:.35rem .7rem;background:#fff}
+.backlink:hover{filter:brightness(0.95)}
+.hidden{display:none}
+
+
+/* --- Splash & Headlines --- */
+.hero-splash{display:flex;align-items:center;justify-content:center;min-height:65vh;text-align:center}
+.brand{display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center}
+.brand .logo-big{font-size:64px;line-height:1}
+.brand .name{font-size:36px;font-weight:900;letter-spacing:1px}
+.welcome{font-size:18px;color:var(--muted);margin-top:6px}
+
+.headline-xl{font-size:28px;font-weight:900;margin:10px 0}
+.headline-lg{font-size:22px;font-weight:900;margin:10px 0}
+.center{ text-align:center }
+
+/* Tiles tweaks */
+.tile{min-height:130px; font-size:1.15rem}
+
+
+/* --- Splash & Choices --- */
+.hero-splash{display:flex;align-items:center;justify-content:center;min-height:72vh;text-align:center}
+.brand{display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center}
+.brand .logo-big{font-size:72px;line-height:1}
+.brand .name{font-size:40px;font-weight:900;letter-spacing:1px}
+.welcome{font-size:18px;color:var(--muted);margin-top:6px}
+.welcome-cta{font-size:22px;font-weight:900;margin-top:6px}
+.choices-card{display:inline-block;background:#f7f9ff;border:2px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-top:16px}
+
+/* Center tiles inside choices */
+.choices-card .tile-grid{margin:6px 0;grid-template-columns:repeat(2, 1fr);gap:12px;min-width:300px}
+@media (max-width:600px){ .choices-card .tile-grid{grid-template-columns:1fr; min-width:260px} }
+
+/* Buttons (links) like badges */
+.backlink{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--blue-2);
+  text-decoration:none;border:2px solid var(--line);border-radius:999px;padding:.35rem .7rem;background:#fff}
+.backlink:hover{filter:brightness(0.95)}
+.upper{ text-transform: uppercase; }
+
+/* Headlines */
+.headline-xl{font-size:28px;font-weight:900;margin:12px 0}
+.headline-lg{font-size:22px;font-weight:900;margin:8px 0}
+.center{ text-align:center }
+
+/* Status message inside cards */
+.status{display:none;margin-top:10px;padding:10px 12px;border:2px solid var(--line);border-radius:var(--radius);background:#fff}
+.status.show{display:block}
+.status-lg{font-size:1.05rem;font-weight:800}
+
+/* Login positioning helper */
+.push-down{margin-top:8vh}
+
+/* Panel header card */
+.page-head{background:#fff;border:2px solid var(--line);border-radius:var(--radius);padding:12px 16px;margin-bottom:10px}
+
+
+/* Hover effects */
+.tile{transition: transform .12s ease, box-shadow .12s ease}
+.tile:hover{transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 22px rgba(0,0,0,.08)}
+.btn{transition: transform .12s ease, box-shadow .12s ease}
+.btn:hover{transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.06)}
+
+/* Stronger separation for page-head so text doesn't feel "inside the form" */
+.page-head{ margin-top: 14px; margin-bottom: 14px }
+.page-head .muted{ color: var(--muted) }
+
+/* Centered, legible confirmation/status messages */
+.notice{
+  border: 2px solid var(--blue);
+  color: var(--blue);
+  font-weight: 800;
+  text-align: center;
+  padding: 10px 12px;
+  background: #fff;
+  border-radius: var(--radius);
+}
+.status{ 
+  text-align:center;
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+
+/* --- ensure photo background overrides later background color --- */
+body{
+  background-image: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url('./assets/bg.webp') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+/* BOTONES GRANDES AZULES */
+.boton-accion {
+  background-color: #007bff;   /* azul */
+  color: #fff;
+  border: none;
+  padding: 15px 25px;
+  margin: 8px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.boton-accion:hover {
+  background-color: #0056b3; /* azul más oscuro */
+  transform: scale(1.03);
+}
+
+.boton-accion:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Tiles azules grandes ===== */
+.tile-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 16px 0 24px;
+}
+
+.tile{
+  user-select: none;
+  text-align: center;
+  padding: 22px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border: 2px solid var(--line, #cfd8e3);
+  background: #fff;
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+}
+
+.tile-blue{
+  background: #0b5ed7;         /* azul bootstrap-ish */
+  color: #fff;
+  border-color: #0a58ca;
+}
+.tile-blue:hover{
+  background: #094fb4;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(9,79,180,.25);
+}
+.tile:active{
+  transform: translateY(0);
+}
+
+.tile.active{
+  outline: 3px solid #6ea8fe;
+}
+
+/* Pantallas (secciones) */
+.section-screen{
+  display: none;  /* el JS se encarga de mostrar/ocultar */
+}
+
+/* Topbar "ATRÁS" visible solo cuando estás dentro de una pantalla */
+.topbar .backlink#nav-back.hidden{
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ===== Tiles/Botones azules grandes (inicio y menús) ===== */
+.tile-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;
+  margin:16px 0 24px;
+}
+.tile{
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none; user-select:none; text-align:center;
+  padding:22px 18px; border-radius:12px; font-weight:700; font-size:1.1rem;
+  cursor:pointer; border:2px solid var(--line,#cfd8e3); background:#fff;
+  transition:.12s; box-shadow:0 6px 16px rgba(0,0,0,.06);
+}
+.tile-blue{ background:#0b5ed7; color:#fff; border-color:#0a58ca; }
+.tile-blue:hover{ background:#094fb4; transform:translateY(-2px); box-shadow:0 10px 24px rgba(9,79,180,.25);}
+
+/* ===== DENTASOFT FIX PACK (pegar al FINAL del styles.css) ===== */
+
+/* 1) Fondo: una sola definición fuerte (evita duplicados previos) */
+body{
+  background-image: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url('./assets/bg.webp') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+/* 2) Grid de opciones (Inicio y menús) */
+.tile-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+  margin:16px 0 24px;
+}
+
+/* 3) Tile base (sirve para <a> y <button>) */
+.tile, .tile[type="button"], .tile[type="submit"]{
+  display:flex; align-items:center; justify-content:center;
+  text-decoration:none; user-select:none; text-align:center;
+  padding:22px 18px; border-radius:12px; font-weight:800; font-size:1.12rem;
+  cursor:pointer; border:2px solid var(--line,#0b5ed7); background:#fff; color: var(--ink,#0b3d91);
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+}
+.tile:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+
+/* 4) Variante azul */
+.tile-blue{
+  background:#0b5ed7; color:#fff !important; border-color:#0a58ca;
+}
+.tile-blue:hover{
+  background:#094fb4; color:#fff !important;
+}
+
+/* 5) Fuerza AZUL para las opciones de INICIO (solo en el contenedor con id #start-choices) */
+#start-choices .tile{ background:#0b5ed7; color:#fff !important; border-color:#0a58ca; }
+#start-choices .tile:hover{ background:#094fb4; }
+
+/* 6) Botón “estilo primario” por si mantenés <button> en vez de <a> */
+.btn-primary{
+  background:#0b5ed7; color:#fff; border:2px solid #0a58ca; font-weight:900;
+}
+.btn-primary:hover{ filter:brightness(1.06); }
+
+/* 7) Asegura contraste en la topbar sobre el fondo */
+header.topbar{
+  background:#ffffffcc; /* blanco con transparencia */
+  backdrop-filter: blur(3px);
+  border-bottom:2px solid var(--line,#0b5ed7);
+}
+
