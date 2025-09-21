@@ -1,0 +1,30 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"/>
+<title>Dentasoft · Recuperar/Crear contraseña</title><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="./styles.css"/>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+<script defer src="./common.js"></script>
+<script defer src="./reset.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">🦷 <span>DENTASOFT</span></div>
+  <nav class="menu">
+    <a href="./index.html">Inicio</a>
+    <a href="./reset.html" class="active">Crear contraseña</a>
+  </nav>
+</header>
+<main class="container">
+  <section class="card" style="max-width:520px;margin:0 auto">
+    <h2>Crear / Recuperar contraseña</h2>
+    <p class="notice">Ingresá tu email. Te enviaremos un enlace para crear o cambiar tu contraseña.</p>
+    <label>Email <input id="email" type="email" placeholder="usuario@ejemplo.com"></label>
+    <div class="space"></div>
+    <div class="row" style="gap:8px">
+      <button id="btn-send" class="btn">Enviar enlace</button>
+      <a class="btn link" href="./index.html">Volver al inicio</a>
+    </div>
+    <div id="msg" class="space notice hidden"></div>
+  </section>
+</main>
+</body></html>
