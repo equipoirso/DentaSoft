@@ -1,12 +1,32 @@
-
-
+// firestore.rules
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function isSignedIn() { return request.auth != null; }
-    match /users/{uid} { allow read: if isSignedIn() && request.auth.uid == uid; allow write: if isSignedIn() && request.auth.uid == uid; }
-    match /pacientes/{dni} { allow read, create, update: if isSignedIn(); }
-    match /turnos/{id} { allow read, create, update: if isSignedIn(); }
-    match /pagos/{id} { allow read, create: if isSignedIn(); }
+
+    // Slots: 45’, hábiles, 9–13 y 14–19 (sin 13–14)
+    function isValidSlot(start, end){
+      return (end.toMillis() - start.toMillis()) == 45 * 60 * 1000
+        && (start.toDate().getDay() >= 1 && start.toDate().getDay() <= 5)
+        && ( (start.toDate().getHours() >= 9 && end.toDate().getHours() <= 13)
+          || (start.toDate().getHours() >= 14 && end.toDate().getHours() <= 19) )
+        && ( (start.toDate().getMinutes() % 45) == 0 && (end.toDate().getMinutes() % 45) == 0 );
+    }
+
+    match /appointments/{id} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.providerId is string
+        && isValidSlot(request.resource.data.start, request.resource.data.end)
+        && request.resource.data.status in ['programado','confirmado','atendido','cancelado','ausente']
+        && request.resource.data.patientDni is string
+        && request.resource.data.patientEmail is string;
+      allow update, delete: if isSignedIn();
+    }
+
+    match /patients/{dni} {
+      allow read, create, update: if isSignedIn();
+      allow delete: if false;
+    }
   }
 }

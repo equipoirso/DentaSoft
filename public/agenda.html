@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>DentaSoft | Agenda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; }
+    .card{ border:1px solid #e5e7eb; padding:10px; border-radius:10px; }
+    .busy{ background:#ffe6e6; }
+    .free{ background:#e7f7ee; }
+  </style>
+</head>
+<body style="font-family:system-ui,Segoe UI,Roboto,Arial;max-width:960px;margin:20px auto">
+  <h1>Agenda</h1>
+
+  <!-- Firebase -->
+  <script src="./app.js"></script>
+
+  <label>Fecha: <input type="date" id="date"></label>
+  <div id="grid" class="grid" style="margin-top:12px"></div>
+
+  <script>
+    const SLOT_MIN = 45;
+    const WORK = [[9,13],[14,19]];
+    const WEEKENDS = [0,6];
+    const providerId = 'default';
+
+    const dateEl = document.getElementById('date');
+    dateEl.value = new Date().toISOString().slice(0,10);
+
+    function buildSlots(dayStr){
+      const d = new Date(dayStr); d.setHours(0,0,0,0);
+      if (WEEKENDS.includes(d.getDay())) return [];
+      const out = [];
+      for (const [h1,h2] of WORK) {
+        let t = new Date(d); t.setHours(h1,0,0,0);
+        const end = new Date(d); end.setHours(h2,0,0,0);
+        while (new Date(t.getTime()+SLOT_MIN*60000) <= end) {
+          const start = new Date(t);
+          const finish = new Date(t.getTime()+SLOT_MIN*60000);
+          out.push({ start, end: finish });
+          t = new Date(t.getTime()+SLOT_MIN*60000);
+        }
+      }
+      return out;
+    }
+    const fmtTime = dt => new Date(dt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    const fmtDate = dt => new Date(dt).toLocaleDateString('es-AR', { weekday:'long', day:'2-digit', month:'2-digit' });
+
+    async function render(){
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      const day = dateEl.value;
+      const slots = buildSlots(day);
+
+      // traer turnos del día
+      const start = new Date(day); start.setHours(0,0,0,0);
+      const end   = new Date(day); end.setHours(23,59,59,999);
+      const q = await window.db.collection('appointments')
+        .where('providerId','==',providerId)
+        .where('start','>=',start.toISOString())
+        .where('start','<=',end.toISOString()).get();
+
+      const busy = {};
+      q.forEach(doc => { const a = doc.data(); busy[new Date(a.start).toISOString()] = { id:doc.id, ...a }; });
+
+      for (const s of slots){
+        const key = s.start.toISOString();
+        const appt = busy[key];
+        const card = document.createElement('div');
+        card.className = 'card ' + (appt ? 'busy':'free');
+        card.innerHTML = `
+          <div><b>${fmtTime(s.start)} - ${fmtTime(s.end)}</b></div>
+          <div>Estado: ${appt ? 'Ocupado' : 'Libre'}</div>
+          <div class="actions"></div>
+        `;
+        const actions = card.querySelector('.actions');
+
+        if (!appt) {
+          const btn = document.createElement('button');
+          btn.textContent = 'Reservar';
+          btn.onclick = async ()=>{
+            const dni = prompt('DNI (8 dígitos):'); if (!/^\d{8}$/.test(dni||'')) return alert('DNI inválido');
+            const email = prompt('Email del paciente:'); if (!email) return;
+            const id = `${providerId}_${s.start.toISOString()}`;
+            await window.db.collection('appointments').doc(id).set({
+              providerId,
+              start: s.start.toISOString(),
+              end: s.end.toISOString(),
+              status: 'programado',
+              patientDni: String(dni),
+              patientEmail: String(email),
+              createdAt: new Date().toISOString()
+            });
+            render();
+          };
+          actions.appendChild(btn);
+        } else {
+          const p1 = document.createElement('div');
+          p1.innerHTML = `<small>DNI: ${appt.patientDni}</small>`;
+          const p2 = document.createElement('div');
+          p2.innerHTML = `<small>Email: ${appt.patientEmail}</small>`;
+          const btn = document.createElement('button');
+          btn.textContent = 'Enviar recordatorio';
+          btn.onclick = async ()=>{
+            try{
+              const sendReminder = window.functions.httpsCallable('sendReminder');
+              await sendReminder({
+                to: appt.patientEmail,
+                subject: 'Recordatorio de turno - DentaSoft',
+                html: `
+                  <div style="font-family:system-ui,Segoe UI,Roboto,Arial">
+                    <h2>Recordatorio de turno</h2>
+                    <p>Te recordamos tu turno para <b>${fmtDate(s.start)}</b> a las <b>${fmtTime(s.start)}</b>.</p>
+                    <p>Si no podés asistir, por favor respondé este correo.</p>
+                    <p>— DentaSoft</p>
+                  </div>`
+              });
+              alert('Enviado ✅');
+            }catch(e){ console.error(e); alert('Error ❌'); }
+          };
+          actions.append(p1,p2,btn);
+        }
+        grid.appendChild(card);
+      }
+    }
+
+    dateEl.addEventListener('change', render);
+    // Autenticación mínima para que rules permitan leer/escribir (usuario anónimo)
+    window.auth.signInAnonymously().then(render);
+  </script>
+</body>
+</html>
