@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Dentasoft · Pacientes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="./styles.css"/>
+
+  <!-- Firebase -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+
+  <script defer src="./common.js"></script>
+  <script defer src="./odonto-pacientes.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">🦷 <span>DENTASOFT</span></div>
+    <nav class="menu">
+      <a class="backlink upper" href="./odonto.html">ATRÁS</a>
+      <a class="backlink upper" href="./index.html">SALIR</a>
+    </nav>
+  </header>
+
+  <section class="container">
+    <div class="page-head"><h1 class="headline-xl">Pacientes</h1></div>
+
+    <!-- Buscar -->
+    <div class="card" id="searchCard">
+      <h2 class="headline-lg">Ingrese el DNI del paciente</h2>
+      
+     <div class="row search-row">
+  <input id="pDni" placeholder="DNI" inputmode="numeric" />
+  <button id="pBuscar" class="btn btn-primary btn-sm">Buscar</button>
+  <button id="pLimpiar" class="btn btn-sm btn-ghost">Limpiar</button>
+        </div>
+    </div>
+
+    <!-- Datos del paciente -->
+    <div class="card hidden" id="datosCard">
+      <h3 class="headline-lg">Datos del paciente</h3>
+      <div id="pDatos" class="panel"></div>
+    </div>
+
+    <!-- Historia clínica (tabla tipo Excel) -->
+    <div class="card hidden" id="histCard">
+      <h3 class="headline-lg">Historia clínica</h3>
+      <div class="table-wrap">
+        <table class="grid-table grid-table--boxed" id="histTable">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Motivo</th>
+              <th>Estado</th>
+              <th>Pagado</th>
+              <th>Notas</th>  <!-- renombrado -->
+            </tr>
+          </thead>
+          <tbody id="histTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL Notas (misma vista con contexto, sin “fecha de pago”) -->
+  <div id="visitModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="vmTitle">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="vmTitle" class="headline-lg">Notas de la visita</h3>
+        <button id="vmClose" class="btn link close-x" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="kv"><span class="k">Fecha</span><span class="v" id="vmFecha">-</span></div>
+          <div class="kv"><span class="k">Hora</span><span class="v" id="vmHora">-</span></div>
+          <div class="kv"><span class="k">Motivo</span><span class="v" id="vmMotivo">-</span></div>
+          <div class="kv"><span class="k">Estado</span><span class="v"><span class="badge" id="vmEstado">-</span></span></div>
+          <div class="kv"><span class="k">Pagado</span><span class="v" id="vmPago">-</span></div>
+        </div>
+
+        <div class="notes-panel">
+          <div class="k">Notas</div>
+          <div class="notes-box" id="vmNotas">-</div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button id="vmClose2" class="btn">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>© Dentasoft</footer>
+</body>
+</html>

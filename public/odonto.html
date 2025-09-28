@@ -1,0 +1,44 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/>
+<title>Dentasoft · Odontólogo/a</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="./styles.css"/>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script defer src="./common.js"></script>
+<script defer>
+(async()=>{
+  const { ensureRole } = await window.Dentasoft.ready();
+  await ensureRole('odontologo'); // protege el menú también
+})();
+</script>
+<style>
+.tile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:16px 0 24px}
+.tile{display:flex;align-items:center;justify-content:center;text-decoration:none; user-select:none;text-align:center;padding:22px 18px;border-radius:12px;font-weight:700;font-size:1.1rem;cursor:pointer;border:2px solid var(--line,#cfd8e3);background:#fff;transition:.12s;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+.tile-blue{background:#0b5ed7;color:#fff;border-color:#0a58ca}
+.tile-blue:hover{background:#094fb4;transform:translateY(-2px);box-shadow:0 10px 24px rgba(9,79,180,.25)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">🦷 <span>DENTASOFT</span></div>
+  <nav class="menu">
+    <a class="backlink upper" href="./index.html">SALIR</a>
+  </nav>
+</header>
+
+<section class="container">
+  <div class="page-head center"><h1 class="headline-xl">Panel de Odontólogo</h1></div>
+  <p class="headline-lg">Elija una acción:</p>
+
+  <div class="tile-grid" id="odo-tiles">
+    <a class="tile tile-blue" href="./odonto-agenda.html">Agenda</a>
+    <a class="tile tile-blue" href="./odonto-pacientes.html">Pacientes</a>
+    <a class="tile tile-blue" href="./odonto-reportes.html">Reportes</a>
+    <a class="tile tile-blue" href="./odonto-recetas.html">Recetas</a>
+  </div>
+</section>
+
+<footer>© Dentasoft</footer>
+</body></html>

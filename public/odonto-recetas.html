@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Dentasoft · Recetas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="./styles.css"/>
+
+  <!-- Firebase compat -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+
+  <script defer src="./common.js"></script>
+  <script defer src="./odonto-recetas.js"></script>
+
+  <!-- jsPDF -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">🦷 <span>DENTASOFT</span></div>
+  <nav class="menu">
+    <a class="backlink upper" href="./odonto.html">ATRÁS</a>
+    <a class="backlink upper" href="./index.html">SALIR</a>
+  </nav>
+</header>
+
+<section class="container">
+
+  <!-- Título SOLO (más separado del resto) -->
+  <div class="card card-title card-title--spaced">
+    <h1 class="headline-xl">Recetas</h1>
+  </div>
+
+  <!-- Cuadro de DNI -->
+  <div class="card card-work">
+    <h2 class="section-title blue">Ingrese DNI del paciente</h2>
+
+    <form id="formBuscar" class="dni-row" autocomplete="off" novalidate>
+      <input
+        id="recDni"
+        class="dni-input"
+        type="text"
+        inputmode="numeric"
+        maxlength="8"
+        placeholder="12345678"
+        required
+      />
+      <button id="btnBuscar" class="btn btn-primary" type="submit">Buscar</button>
+      <button id="btnLimpiar" class="btn btn-secondary" type="button">Limpiar</button>
+    </form>
+    <div id="dniError" class="form-error hidden">El DNI debe contener exactamente 8 números.</div>
+  </div>
+
+  <!-- Subcuadro PACIENTE -->
+  <div id="pacienteWrapper" class="card subtle hidden">
+    <div id="pacienteBox" class="subcard"></div>
+  </div>
+
+  <!-- Receta -->
+  <div id="recetaWrapper" class="card hidden">
+    <h3 class="section-title blue">Ingrese su receta</h3>
+
+    <!-- Ancho completo -->
+    <textarea id="recTexto" class="bigarea fullwidth" rows="10"
+      placeholder="Indicación / medicación, posología, observaciones…"></textarea>
+
+    <div class="actions-center actions-equal">
+      <button id="btnCrear" class="btn btn-primary" disabled>Crear receta (PDF)</button>
+      <button id="btnCancelar" class="btn btn-primary" type="button">Cancelar</button>
+    </div>
+
+    <div id="statusMsg" class="status muted"></div>
+  </div>
+
+</section>
+
+<footer>© Dentasoft</footer>
+</body>
+</html>

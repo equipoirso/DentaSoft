@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Dentasoft · Agenda del Odontólogo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="./styles.css"/>
+
+  <!-- Firebase + app -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+  <script defer src="./common.js"></script>
+  <script defer src="./odonto-agenda.js"></script>
+
+  <style>
+    .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .nowrap{white-space:nowrap}
+    .table-wrap{overflow:auto;margin-top:12px}
+
+    /* Tabla “tipo Excel” */
+    table.agenda{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
+    table.agenda th,table.agenda td{border:1px solid var(--line,#dfe3ea);padding:10px}
+    table.agenda th{background:#eef2ff;color:#1f2937;text-align:center;font-weight:700}
+    table.agenda td.center{text-align:center}
+    table.agenda td.left{text-align:left}
+    table.agenda td.actions{text-align:center}
+    table.agenda tr:nth-child(even) td{background:#fafbff}
+
+    .pill{padding:2px 8px;border-radius:999px;font-size:.85rem;border:1px solid transparent}
+    .pill.prog{background:#e0e7ff;color:#1e3a8a;border-color:#93c5fd}
+    .pill.comp{background:#d1fae5;color:#065f46;border-color:#10b981}
+    .pill.canc{background:#fee2e2;color:#991b1b;border-color:#ef4444}
+    .pill.posp{background:#fef9c3;color:#854d0e;border-color:#fde68a}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">🦷 <span>DENTASOFT</span></div>
+  <nav class="menu">
+    <a class="backlink upper" href="./odonto.html">ATRÁS</a>
+    <a class="backlink upper" href="./index.html">SALIR</a>
+  </nav>
+</header>
+
+<section class="container">
+  <div class="page-head"><h1 class="headline-xl">Agenda</h1></div>
+
+  <div class="card">
+    <!-- Controles -->
+    <div class="toolbar">
+      <button id="dPrev" class="btn">← Anterior</button>
+      <button id="dHoy" class="btn">Hoy</button>
+      <button id="dNext" class="btn">Siguiente →</button>
+      <input id="dFecha" type="date" title="Elegir fecha">
+      <button id="dRefrescar" class="btn">Refrescar</button>
+    </div>
+
+    <div id="dStatus" class="notice" style="display:none;margin-top:8px"></div>
+
+    <!-- Tabla -->
+    <div class="table-wrap">
+      <table class="agenda">
+        <colgroup>
+          <col style="width:120px">
+          <col>
+          <col style="width:180px">
+          <col style="width:140px">
+          <col style="width:160px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Hora</th>
+            <th>Paciente</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="dTbody">
+          <tr><td class="center" colspan="5">Sin turnos para el día.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>© Dentasoft</footer>
+</body>
+</html>
+
