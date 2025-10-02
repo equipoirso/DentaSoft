@@ -645,3 +645,66 @@ body::before{
   .k { min-width: 96px; }
 }
 
+/* SOMBREADO DE BOTONES DANI
+   Fuerza cambio de color al pasar el mouse y agrega transiciones
+----------------------------------------------------------------- */
+
+/* Transiciones suaves para botones/tiles */
+.tile,
+.btn,
+button,
+.boton-accion,
+.backlink {
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .06s ease;
+}
+
+/* Tiles genéricos */
+.tile:hover {
+  background-color: #0b63ce !important;   /* azul más intenso */
+  color: #ffffff !important;               /* contraste */
+  border-color: #094f9f !important;
+  box-shadow: 0 10px 24px rgba(9,79,180,.25);
+  transform: translateY(-2px);
+}
+
+/* Variante azul ya existente */
+.tile-blue:hover {
+  background-color: #094fb4 !important;
+  color: #ffffff !important;
+  border-color: #08438f !important;
+}
+
+/* Botones "primarios" y <button> genéricos */
+.btn:hover,
+button:hover {
+  background-color: #0b63ce !important;
+  color: #ffffff !important;
+  border-color: #094f9f !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+
+/* Botón grande azul de tu UI */
+.boton-accion:hover {
+  background-color: #094fb4 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Enlaces con estilo botón (volver / etc.) */
+.backlink:hover {
+  background-color: #e6f0ff !important;
+  color: #0b3d91 !important;
+  border-color: #0b63ce !important;
+}
+
+/* Accesibilidad: foco visible con teclado */
+.tile:focus-visible,
+.btn:focus-visible,
+button:focus-visible,
+.boton-accion:focus-visible,
+.backlink:focus-visible {
+  outline: 3px solid #98c5ff;
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
