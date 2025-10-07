@@ -708,3 +708,16 @@ button:focus-visible,
   border-radius: 10px;
 }
 
+
+/* Quitar subrayado/bordes cuando el logo está dentro de un <a> */
+a, .brand { text-decoration: none; }
+a img, .brand img { border: 0; outline: 0; }
+
+/* Evitar el espacio de línea base: que el logo no sea inline */
+.logo-img { display: block; }
+
+/* Si tenías alguna línea bajo el encabezado, quítala aquí */
+.header, .topbar, .brand { border-bottom: none !important; }
+
+/* Si usaste <hr> justo debajo del logo y no lo querés */
+.header hr, .topbar hr { display: none; }
