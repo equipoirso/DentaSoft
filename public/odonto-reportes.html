@@ -1,46 +1,106 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"/>
-<title>Dentasoft · Reportes</title>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<link rel="stylesheet" href="./styles.css"/>
-<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-<script defer src="./common.js"></script>
-<script defer src="./odonto-reportes.js"></script>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Dentasoft · Reportes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="./styles.css"/>
+
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+  <script defer src="./common.js"></script>
+  <script defer src="./odonto-reportes.js"></script>
 </head>
 <body>
 <header class="topbar">
   <div class="logo">🦷 <span>DENTASOFT</span></div>
   <nav class="menu">
-    <a class="backlink upper" href="./odonto.html">ATRÁS</a>
-    <a class="backlink upper" href="./index.html">SALIR</a>
+    <a class="btn btn-ghost upper" href="./odonto.html">← Atrás</a>
+    <a class="btn btn-ghost upper" href="./index.html">Salir</a>
   </nav>
 </header>
 
 <section class="container">
-  <div class="page-head"><h1 class="headline-xl">Reportes</h1></div>
+  <div class="page-head">
+    <h1 class="headline-xl">Reportes</h1>
+  </div>
 
-  <div class="card">
-    <div class="grid3">
-      <div>
-        <div class="label">Desde</div>
+  <div class="card card-pad">
+    <!-- Barra de filtros -->
+    <form id="rForm" class="filter-bar" onsubmit="return false;">
+      <div class="field">
+        <label for="rDesde">Desde</label>
         <input type="date" id="rDesde">
       </div>
-      <div>
-        <div class="label">Hasta</div>
+      <div class="field">
+        <label for="rHasta">Hasta</label>
         <input type="date" id="rHasta">
       </div>
-      <div class="flex" style="align-items:end">
-        <button id="rCalcular" class="tile tile-blue">Calcular</button>
+      <!-- checkbox alineado -->
+      <div class="field check-one">
+        <label for="rUnDia" class="chk">
+          <input type="checkbox" id="rUnDia">
+          <span>Elegir un solo día</span>
+        </label>
+      </div>
+      <div class="actions">
+        <button id="rCalcular" class="btn btn-primary" type="button">Calcular</button>
+        <button id="rLimpiar" class="btn btn-outline" type="button">Limpiar</button>
+      </div>
+    </form>
+
+    <!-- Totales -->
+    <div id="rKpi" class="kpi-grid" hidden></div>
+
+    <!-- Tabla -->
+    <h3 id="rDetalleT" class="section-title" hidden>Detalle por día</h3>
+    <div class="table-wrap" id="rTableWrap" hidden>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th class="num">Total</th>
+            <th class="num">Completados</th>
+            <th class="num">Cancelados</th>
+            <th class="num">Pospuestos</th>
+          </tr>
+        </thead>
+        <tbody id="rDiario"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal de detalle diario -->
+  <div id="diaModal" class="modal" hidden>
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <h3 id="mTitulo">Turnos del día</h3>
+        <button id="mCerrar" class="btn btn-ghost" type="button">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Paciente</th>
+                <th>DNI</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="mTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button id="mCerrar2" class="btn btn-outline" type="button">Cerrar</button>
       </div>
     </div>
-
-    <div id="rKpi" style="margin-top:12px"></div>
-    <h3>Detalle por día</h3>
-    <div id="rDiario"></div>
   </div>
 </section>
 
 <footer>© Dentasoft</footer>
-</body></html>
+</body>
+</html>
